@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxt.sys.mapper.BillsMapper">
+    <resultMap id="BaseResultMap" type="com.sxt.sys.domain.Bills">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="billtime" property="billtime"
+                jdbcType="TIMESTAMP" />
+        <result column="typeid" property="typeid" jdbcType="INTEGER" />
+        <result column="price" property="price" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="MyBaseResultMap"
+               type="com.sxt.sys.domain.Bills">
+        <result column="name" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+    <select id="queryAllBills" resultMap="MyBaseResultMap">
+        SELECT t1.*,t2.name FROM bills t1 LEFT JOIN bill_type t2 ON
+        t1.typeid=t2.id
+        <where>
+            <if test="typeid!=null">
+                and t1.typeid=#{typeid}
+            </if>
+
+            <if test="name!=null and name!=''">
+                and t2.name = #{name}
+            </if>
+
+            <if test="startTime!=null">
+                and t1.billtime >=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and t1.billtime <![CDATA[<=]]>
+                #{endTime}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,50 @@
+spring:
+  thymeleaf:
+    cache: false
+  #druid数据源的配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource #指定数据源的类型   druid
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/exam?serverTimezone=UTC
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initialSize: 3
+      minIdle: 3
+      maxActive: 30
+      maxWait: 15000
+      timeBetweenEvictionRunsMillis: 120000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: false
+      maxPoolPreparedStatementPerConnectionSize: 20
+      removeAbandoned: true
+      removeAbandonedTimeoutMillis: 20000
+      logAbandoned: true
+      logDifferentThread: true
+      #filters: log4j,stat
+      #connectionProperties:  druid.stat.mergeSql=true;druid.stat.logSlowSql=true;druid.stat.slowSqlMillis=3000
+      useGlobalDataSourceStat: true
+      # Druid 监控 Servlet 配置参数
+      druidRegistrationUrl: /druid/*
+      loginUsername: root #监控后台登录名称
+      loginPassword: 123456 #监控后台登录密码
+      allow:
+      deny:
+      # Druid 监控过滤相关配置参数
+      filtersUrlPatterns: /*
+      exclusions: '*.js,*.gif,*.jpg,*.jpeg,*.png,*.css,*.ico,*.jsp,/druid/*'
+
+
+
+mybatis-plus:
+  mapper-locations:
+    - classpath:com/sxt/sys/mapper/xml/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:   #配置日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #指定mybatis的日志输出对象

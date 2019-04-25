@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>部门管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css"
+	href="/resources/zTree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/zTree/plugin/css/index.css">
+<link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+<link rel="stylesheet" href="/resources/css/public.css" media="all" />
+<script type="text/javascript"
+	src="/resources/zTree/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript"
+	src="/resources/zTree/js/jquery.ztree.core.js"></script>
+<script type="text/javascript"
+	src="/resources/zTree/plugin/js/selectTree.js"></script>
+</head>
+<body class="childrenBody">
+	<!-- 查询开始 -->
+	<fieldset class="layui-elem-field layui-field-title">
+		<legend>查询条件</legend>
+	</fieldset>
+	<form class="layui-form" id="searchForm" method="post">
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">搜索选框</label>
+				<div class="layui-input-inline">
+					<select name="typeid" id="searchid">
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">开始时间</label>
+				<div class="layui-input-inline">
+					<input type="text" name="startTime" id="startTime"
+						autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">结束时间</label>
+				<div class="layui-input-inline">
+					<input type="text" name="endTime" id="endTime" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="text-align: center;">
+			<a class="layui-btn search_btn" id="doSearch">查询</a>
+			<button type="reset" class="layui-btn layui-btn-warm">清空</button>
+		</div>
+	</form>
+	<!-- 查询结束 -->
+	<!-- 数据表格开始 -->
+	<table class="layui-hide" id="userList" lay-filter="userList"></table>
+
+	<div id="tableToolBar" style="display: none;" lay-filter="tableToolBar">
+		<button type="button" class="layui-btn layui-btn-sm layui-btn-warm"
+			lay-event="add">添加</button>
+	</div>
+	<!-- 数据表格结束 -->
+	<script src="/resources/layui/layui.js" charset="utf-8"></script>
+
+	<!-- 添加修改的弹出层  开始 -->
+	<div style="display: none;" id="addAndUpdateUser">
+		<form class="layui-form" id="dataFrm" lay-filter="dataFrm"
+			style="margin: 10px">
+
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择类型</label>
+				<div class="layui-input-block" id="dddd" >
+					<!-- <input type="radio" name="typeid" value="1" title="不限" checked="">
+					<input type="radio" name="typeid" value="2" title="支出"> 
+					<input
+						type="radio" name="typeid" value="3" title="收入"> 
+					<input
+						type="radio" name="typeid" value="4" title="转账"> 
+					<input
+						type="radio" name="typeid" value="5" title="借出"> 
+					<input
+						type="radio" name="typeid" value="6" title="借入"> 
+					<input
+						type="radio" name="typeid" value="7" title="还入">
+					<input
+						type="radio" name="typeid" value="8" title="还出"> -->
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">标题</label>
+				<div class="layui-input-block">
+					<input type="text" name="title" lay-verify="title"
+						autocomplete="off" placeholder="请输入标题" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="billtime"
+							name="billtime" placeholder="yyyy-MM-dd HH:mm:ss">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">金额</label>
+					<div class="layui-input-inline">
+						<input type="hidden" name="id"> <input type="text"
+							name="price" id="price" lay-verify="required" autocomplete="off"
+							class="layui-input">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">说明</label>
+				<div class="layui-input-block">
+					<textarea placeholder="请输入内容" id="remark" name="remark"
+						class="layui-textarea"></textarea>
+				</div>
+			</div>
+
+
+			<div class="layui-form-item" style="text-align: center;">
+				<div class="layui-input-block">
+					<button type="button" class="layui-btn" lay-submit=""
+						lay-filter="doSubmit">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<button type="back" class="layui-btn layui-btn-primary">返回</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<!-- 添加修改的弹出层  结束 -->
+
+
+
+
+
+	<script type="text/javascript">
+	var form;
+	var tableIns;//数据表格实例
+		layui.use([ 'element', 'layer', 'jquery', 'form', 'table','laydate' ],
+				function() {
+					var element = layui.element;
+					var layer = layui.layer;
+					var $ = layui.jquery;
+					var laydate = layui.laydate;
+					form = layui.form;
+					var table = layui.table;
+					var laydate=layui.laydate;
+					
+					laydate.render({
+						elem:'#startTime',
+						type:'datetime'
+					})
+					laydate.render({
+						elem:'#endTime',
+						type:'datetime'
+					})
+					initProviderSelect($("#searchid"));
+					 tableIns=table.render({
+					    elem: '#userList'  //指渲染的目标  
+					    ,url:'/bills/loadAllBills'//请求地址
+					    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度
+					    ,height:'full-200'//设置高度    
+					 	,page:true//开启分页
+					 	,toolbar:"#tableToolBar"//设置显示工具条并设置表头左边的工具类
+					 	,defaultToolbar:['filter','print']  //设置默认工具条的显示和顺序
+					 	,id:"goodsListTable"
+					    ,cols: [ [
+					       {type:'checkbox'}
+					      ,{field:'id',  title: 'ID', sort: true,align:"center"}
+					      ,{field:'title',  title: '标题',align:"center"}
+					      ,{field:'name',  title: '支出类型',align:"center"}
+					      ,{field:'billtime',  title: '创建时间',align:"center"}
+					      ,{field:'price',  title: '金额',align:"center"}
+					      ,{field:'remark',  title: '备注',align:"center"}
+					      
+					      
+					    ] ]
+					  });
+					  //查询
+					  $("#doSearch").click(function(){
+						  var params=$("#searchForm").serialize();
+						  table.reload('goodsListTable', {
+				                url: '/bills/loadAllBills?'+params
+				            });
+					  });
+					  table.on('toolbar(userList)', function(obj){
+						  var data = obj.data; //获得当前行数据
+						    switch(obj.event){
+						      case 'add':
+						    	  laydate.render({
+									    elem: '#billtime'
+									    ,type: 'datetime'
+									  });
+						    	  toAdd();
+						      break;
+						    };
+						  });
+					  laydate.render({
+							elem:"#hiredate",
+							type:'datetime'
+						})
+					selectradio($("#dddd"));
+						function selectradio(elem,fun){
+				        	$.post("/bill/loadAllBill",function(obj){
+				        		var html="";
+				            	for(var i=0;i<obj.length;i++){
+				            		var o=obj[i];
+				            		if(o.id==1){
+				            		html+=("<input type='radio'  value="+o.id+" checked=''  title="+o.name+" name='typeid'/>")
+				            		}else{
+				            		
+				            		html+=("<input type='radio'  value="+o.id+"  title="+o.name+" name='typeid'/>")
+				            		
+				            		}
+				            	}
+				            	$("#dddd").html(html);
+				            	form.render();
+				            	
+				            });
+				        }  
+						
+					  
+						function initProviderSelect(elem,fun){
+				        	$.post("/bill/loadAllBill",function(obj){
+				        		elem.html("<option value=''>请选择</option>");
+				            	for(var i=0;i<obj.length;i++){
+				            		var o=obj[i];
+				            		
+				            		elem.append("<option value="+o.id+" > "+o.name+" </option> ")
+				            	}
+				            	form.render("select");
+				            	if(fun!= undefined ){
+				            		fun();
+				            	}
+				            });
+				        }
+					var url="";
+					var mainIndex;
+					//添加
+					  function toAdd(){
+						  url="/bills/addBills";
+							index=layer.open({
+								type:1,//弹出层的类型
+								title:'添加用户',
+								content:$("#addAndUpdateUser"),  //type=1时使用
+								skin:'layui-layer-molv',//设置皮肤
+								area: ['800px', '600px'],//设置宽高
+								shade:0.5,//设置遮罩的透明度
+								shadeClose:true,//设置点击遮罩是否关闭弹出层
+								maxmin:true, //是否显示最大化和最小化的按钮  该参数值对type:1和type:2有效
+								success:function(){
+									
+									$("#dataFrm")[0].reset();
+									
+									
+									
+								}
+						})
+					}
+					//保存
+					  form.on("submit(doSubmit)",function(obj){
+						 
+							$.post(url,obj.field,function(result){
+								if(result.code>0){
+									layer.msg(result.msg);
+									 layer.confirm('继续添加吗？',{icon:3, title:'提示信息'},function(index){
+												toAdd();
+												layer.close(index);
+							            });		 
+								}
+								tableIns.reload();
+								layer.close(index);
+							})
+							return false;//禁用同步提交方式
+						});
+						
+						
+				});
+		
+	</script>
+</body>
+</html>
